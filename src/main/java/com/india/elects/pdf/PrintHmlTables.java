@@ -1,6 +1,5 @@
 package com.india.elects.pdf;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -33,6 +32,7 @@ public class PrintHmlTables {
 
 //		for (int pageId = 0; pageId < 544; pageId++) {
 		extractor.open(args[0]);
+		
 		List<Table> tables = extractor.extract(getHints(), pageId);
 
 
@@ -51,11 +51,35 @@ public class PrintHmlTables {
 
 	}
 
-//	public static List<TableBoundaryIndentificationHelper> getHints() {
-//
-//	}
+	public static List<TableBoundaryIndentificationHelper> getHints() {
+		List<TableBoundaryIndentificationHelper> tables = new ArrayList<>();
 
-	//Sample Impl
+		TableBoundaryIndentificationHelper stateConstTableHelper = new TableBoundaryIndentificationHelper(
+				"ST", "SUMMARY", "MALE", false, false);
+
+		//Define column ranges
+		List<Range<Integer>> stateConstRange = new ArrayList<>();
+		stateConstRange.add(Range.closed(0, 310));
+//		stateConstRange.add(Range.closed(159, 300));
+		stateConstRange.add(Range.closed(311, 600));
+		stateConstTableHelper.setColumnRanges(stateConstRange);
+
+		TableBoundaryIndentificationHelper candidatesTableHelper = new TableBoundaryIndentificationHelper("Canditates",
+				"MALE", "II.", true, false);
+		List<Range<Integer>> rangeTable1 = new ArrayList<>();
+		rangeTable1.add(Range.closed(1, 245));
+		rangeTable1.add(Range.closed(246, 340));
+		rangeTable1.add(Range.closed(341, 440));
+		rangeTable1.add(Range.closed(441, 600));
+		candidatesTableHelper.setColumnRanges(rangeTable1);
+
+		
+		tables.add(stateConstTableHelper);
+		tables.add(candidatesTableHelper);
+		return tables;
+	}
+
+/*	//Sample Impl
 	public static List<TableBoundaryIndentificationHelper> getHints() {
 		List<TableBoundaryIndentificationHelper> textBounds = new ArrayList<>();
 
@@ -167,5 +191,5 @@ public class PrintHmlTables {
 
 		return textBounds;
 	}
-	
+*/	
 }

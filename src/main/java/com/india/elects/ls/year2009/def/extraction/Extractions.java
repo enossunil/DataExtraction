@@ -11,7 +11,7 @@ public enum Extractions implements IExtractMappings {
 	TOTAL_VALID("Votes", new Position(6, 1), "polledValidTotal", null),
 	TENDERED_VOTES("Votes", new Position(8, 1), "polledTenderedVotes", null),
 	
-	POLLING_PERCENTAGE("Polling-Percantage", new Position(0, 0), "III(A). POLLING PERCENTAGE", null),
+//	TODO ENO POLLING_PERCENTAGE("Polling-Percantage", new Position(0, 0), "", null),
 	
 	POLLING_STATIONS_NR("Polling-Stations", new Position(1, 1), "pollingStationCount", null),
 	POLLING_STATIONS_AVG("Polling-Stations", new Position(1, 3), "pollingStationElectoralAvgCnt", null),

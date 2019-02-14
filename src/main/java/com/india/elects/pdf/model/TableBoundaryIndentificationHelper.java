@@ -99,12 +99,6 @@ public class TableBoundaryIndentificationHelper {
 		this.endFlatDeduc = endFlatDeduc;
 	}
 
-	@Override
-	public String toString() {
-		return "TableBoundaryIndentificationHelper [startText=" + startText + ", endText=" + endText
-				+ ", includeStartText=" + includeStartText + ", includeEndText=" + includeEndText + ", endFlatDeduc="
-				+ endFlatDeduc + "]";
-	}
 
 	public List<Range<Integer>> getColumnRanges() {
 		return columnRanges;
@@ -136,6 +130,16 @@ public class TableBoundaryIndentificationHelper {
 
 	public void setTableId(String tableId) {
 		this.tableId = tableId;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "TableBoundaryIndentificationHelper [tableId=" + tableId + ", startText=" + startText + ", endText="
+				+ endText + ", includeStartText=" + includeStartText + ", includeEndText=" + includeEndText
+				+ ", endFlatDeduc=" + endFlatDeduc + ", startFlatDeduc=" + startFlatDeduc + ", columnRanges="
+				+ columnRanges + "]";
 	}
 
 }

@@ -5,11 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
 import com.india.elects.extractor.PDFdbMapper;
+import com.india.elects.ls.year2009.def.extraction.Extractions;
 import com.india.elects.ls.year2009.def.validation.Validations;
 import com.india.elects.ls.year2009.exception.UnxpectedDataFormatInExtractedPDFTable;
 import com.india.elects.ls.year2009.model.Ls2009Constituency;
@@ -32,7 +34,7 @@ public class PDFReader {
 		outDir = file.getParent() + file.separator + "html";
 	}
 
-	public Ls2009Constituency extractConstituencyInPage(int pageNr) throws InvalidPasswordException, IOException {
+	public Ls2009Constituency extractConstituencyInPage(int pageNr) throws InvalidPasswordException, IOException, IllegalAccessException, InvocationTargetException {
 
 		PDFTableExtractor extractor = new PDFTableExtractor();
 		Ls2009Constituency model = new Ls2009Constituency();
@@ -52,6 +54,7 @@ public class PDFReader {
 
 		    PDFdbMapper mapper = new PDFdbMapper();
 		    mapper.validate(tables, Validations.values());
+		    mapper.extract(model, tables, Extractions.values());
 			
 			return model;
 		} finally {

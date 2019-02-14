@@ -646,11 +646,11 @@ public class PDFTableExtractor {
 //			System.out.println(buffer.substring(startIndex,endIndex));
 //			System.out.println("*************************");
 
-//			System.out.println("*************************");
-//			System.out.println(bounds);
-//			System.out.println("startIndex[" + startIndex + "] endIndex[" + endIndex + "]");
-//
-//			System.out.println("*************************");
+			System.out.println("*************************");
+			System.out.println(bounds);
+			System.out.println("startIndex[" + startIndex + "] endIndex[" + endIndex + "]");
+
+			System.out.println("*************************");
 
 			return list.subList(startIndex, endIndex);
 
