@@ -9,9 +9,11 @@ import java.util.List;
 
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
+import com.india.elects.extractor.PDFdbMapper;
+import com.india.elects.ls.year2009.def.validation.Validations;
 import com.india.elects.ls.year2009.exception.UnxpectedDataFormatInExtractedPDFTable;
 import com.india.elects.ls.year2009.model.Ls2009Constituency;
-import com.india.elects.pdf.PDFTableExtractor;
+import com.india.elects.pdf.core.PDFTableExtractor;
 import com.india.elects.pdf.model.Table;
 import com.india.elects.pdf.model.TableBoundaryIndentificationHelper;
 import com.india.elects.utils.StringUtil;
@@ -48,6 +50,9 @@ public class PDFReader {
 			extractVoters(tables.get(3), model);
 			extractVotes(tables.get(4), model);
 
+		    PDFdbMapper mapper = new PDFdbMapper();
+		    mapper.validate(tables, Validations.values());
+			
 			return model;
 		} finally {
 			extractor.close();

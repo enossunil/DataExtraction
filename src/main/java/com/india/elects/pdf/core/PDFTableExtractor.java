@@ -3,7 +3,7 @@
  *
  * Released under the MIT license
  */
-package com.india.elects.pdf;
+package com.india.elects.pdf.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -655,5 +655,13 @@ public class PDFTableExtractor {
 			return list.subList(startIndex, endIndex);
 
 		}
+	}
+
+	public PDDocument getDocument() {
+		return document;
+	}
+
+	public void setDocument(PDDocument document) {
+		this.document = document;
 	}
 }

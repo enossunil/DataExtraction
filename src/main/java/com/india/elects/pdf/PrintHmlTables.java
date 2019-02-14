@@ -8,34 +8,55 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-
 import com.google.common.collect.Range;
+import com.india.elects.pdf.core.PDFTableExtractor;
 import com.india.elects.pdf.model.Table;
 import com.india.elects.pdf.model.TableBoundaryIndentificationHelper;
 
-public class Test {
-
-	public Test() {
-		// TODO Auto-generated constructor stub
-	}
+public class PrintHmlTables {
 
 	public static void main(String[] args) throws IOException {
-
-	}
-
-	public static void printTextArray(String[] args) throws InvalidPasswordException, IOException {
-		
-		PDFTableExtractor extractor = new PDFTableExtractor();
-		try {
-		extractor.open(args[0]);
-		extractor.printTextPositions(0);
-		}finally {
-			extractor.close();
+		if (args == null || args.length < 2) {
+			System.out.println("Input arguments should be 3 args like $inFilePdf[FullPath]  $pageNr $outHtmlFile{fullpath] ");
+			return;
 		}
+
+		testHelper(args);
 	}
 
+	
 	public static void testHelper(String[] args) throws IOException {
+
+		int pageId = Integer.parseInt(args[1]);
+
+		PDFTableExtractor extractor = new PDFTableExtractor();
+
+//		for (int pageId = 0; pageId < 544; pageId++) {
+		extractor.open(args[0]);
+		List<Table> tables = extractor.extract(getHints(), pageId);
+
+
+		Writer writer = new OutputStreamWriter(new FileOutputStream(args[2]));
+
+		for (Table table : tables) {
+			writer.write("<b> Page Nr  </b>: " + (table.getPageIdx() + 1) );
+			writer.write("<b> Table Id </b>: " + (table.getHelper().getTableId()) + "\n");
+			writer.write("<BR>");
+			writer.write(table.toHtml());
+			writer.write("<BR>");
+		}
+		writer.flush();
+		writer.close();
+		extractor.close();
+
+	}
+
+//	public static List<TableBoundaryIndentificationHelper> getHints() {
+//
+//	}
+
+	//Sample Impl
+	public static List<TableBoundaryIndentificationHelper> getHints() {
 		List<TableBoundaryIndentificationHelper> textBounds = new ArrayList<>();
 
 		TableBoundaryIndentificationHelper stateConstTableHelper = new TableBoundaryIndentificationHelper(
@@ -144,30 +165,7 @@ public class Test {
 		textBounds.add(resultHelper);
 		textBounds.add(marginHelper);
 
-		String outDir = args[1];
-		PDFTableExtractor extractor = new PDFTableExtractor();
-
-//		for (int pageId = 0; pageId < 544; pageId++) {
-		int pageId = 0;
-		extractor.open(args[0]);
-		List<Table> tables = extractor.extract(textBounds, pageId);
-
-		StringBuilder bldr = new StringBuilder();
-		bldr.append(outDir);
-		bldr.append(File.separator);
-		bldr.append("page_");
-		bldr.append(pageId);
-		bldr.append(".html");
-		Writer writer = new OutputStreamWriter(new FileOutputStream(bldr.toString()));
-
-		for (Table table : tables) {
-			writer.write("Page: " + (table.getPageIdx() + 1) + " / Table " + (table.getHelper().getTableId()) + "\n");
-			writer.write(table.toHtml());
-		}
-		writer.flush();
-		writer.close();
-		extractor.close();
-
+		return textBounds;
 	}
-
+	
 }

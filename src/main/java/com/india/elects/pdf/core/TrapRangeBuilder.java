@@ -3,7 +3,7 @@
  *
  * Released under the MIT license
  */
-package com.india.elects.pdf;
+package com.india.elects.pdf.core;
 
 import com.google.common.collect.Range;
 import java.util.ArrayList;

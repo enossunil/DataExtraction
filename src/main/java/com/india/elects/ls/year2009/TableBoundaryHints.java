@@ -13,7 +13,7 @@ public class TableBoundaryHints {
 		List<TableBoundaryIndentificationHelper> hints = new ArrayList<>();
 
 		TableBoundaryIndentificationHelper stateConstTableHelper = new TableBoundaryIndentificationHelper(
-				"State-Constituency", "State/UT", "MEN", true, false);
+				"SC", "State/UT", "MEN", true, false);
 		List<Range<Integer>> stateConstRange = new ArrayList<>();
 		stateConstRange.add(Range.closed(1, 400));
 		stateConstRange.add(Range.closed(400, 600));
@@ -54,7 +54,7 @@ public class TableBoundaryHints {
 		votesTableHelper.setColumnRanges(rangeTable4);
 
 		TableBoundaryIndentificationHelper pollingPercentageHelper = new TableBoundaryIndentificationHelper(
-				"Polling Percantage", "POLLING PERCENTAGE", "IV. VOTES", true, false);
+				"Polling-Percantage", "POLLING PERCENTAGE", "IV. VOTES", true, false);
 		List<Range<Integer>> pollingPercentageRange = new ArrayList<>();
 		pollingPercentageRange.add(Range.closed(1, 190));
 		pollingPercentageRange.add(Range.closed(200, 600));
@@ -62,7 +62,7 @@ public class TableBoundaryHints {
 		pollingPercentageHelper.setStartFlatDeduc(16);
 
 		TableBoundaryIndentificationHelper pollingStationsHelper = new TableBoundaryIndentificationHelper(
-				"Polling Stations", "POLLING STATIONS", "DATE(s)", false, false);
+				"Polling-Stations", "POLLING STATIONS", "DATE(s)", false, false);
 		List<Range<Integer>> pollingStationRange = new ArrayList<>();
 		pollingStationRange.add(Range.closed(1, 89));
 		pollingStationRange.add(Range.closed(90, 200));
@@ -70,7 +70,7 @@ public class TableBoundaryHints {
 		pollingStationRange.add(Range.closed(501, 600));
 		pollingStationsHelper.setColumnRanges(pollingStationRange);
 
-		TableBoundaryIndentificationHelper repollDateHelper = new TableBoundaryIndentificationHelper("Re-Poll Dates",
+		TableBoundaryIndentificationHelper repollDateHelper = new TableBoundaryIndentificationHelper("Re-Poll-Dates",
 				"DATE(s) OF RE-POLL", "NUMBER OF POLLING", true, false);
 		List<Range<Integer>> repollRange = new ArrayList<>();
 		repollRange.add(Range.closed(1, 400));
@@ -78,7 +78,7 @@ public class TableBoundaryHints {
 		repollDateHelper.setColumnRanges(repollRange);
 
 		TableBoundaryIndentificationHelper pollingDatesHelper = new TableBoundaryIndentificationHelper(
-				"Polling/Counting Dates", "VI. DATES", "VII. RESULT", false, false);
+				"Polling-Counting-Dates", "VI. DATES", "VII. RESULT", false, false);
 		List<Range<Integer>> pollingDatesRange = new ArrayList<>();
 
 		pollingDatesRange.add(Range.closed(1, 200));
