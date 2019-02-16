@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Range;
+import com.india.elects.ls.year2004.model.TableBoundaryHints;
 import com.india.elects.pdf.core.PDFTableExtractor;
 import com.india.elects.pdf.model.Table;
 import com.india.elects.pdf.model.TableBoundaryIndentificationHelper;
@@ -52,31 +53,9 @@ public class PrintHmlTables {
 	}
 
 	public static List<TableBoundaryIndentificationHelper> getHints() {
-		List<TableBoundaryIndentificationHelper> tables = new ArrayList<>();
-
-		TableBoundaryIndentificationHelper stateConstTableHelper = new TableBoundaryIndentificationHelper(
-				"ST", "SUMMARY", "MALE", false, false);
-
-		//Define column ranges
-		List<Range<Integer>> stateConstRange = new ArrayList<>();
-		stateConstRange.add(Range.closed(0, 310));
-//		stateConstRange.add(Range.closed(159, 300));
-		stateConstRange.add(Range.closed(311, 600));
-		stateConstTableHelper.setColumnRanges(stateConstRange);
-
-		TableBoundaryIndentificationHelper candidatesTableHelper = new TableBoundaryIndentificationHelper("Canditates",
-				"MALE", "II.", true, false);
-		List<Range<Integer>> rangeTable1 = new ArrayList<>();
-		rangeTable1.add(Range.closed(1, 245));
-		rangeTable1.add(Range.closed(246, 340));
-		rangeTable1.add(Range.closed(341, 440));
-		rangeTable1.add(Range.closed(441, 600));
-		candidatesTableHelper.setColumnRanges(rangeTable1);
 
 		
-		tables.add(stateConstTableHelper);
-		tables.add(candidatesTableHelper);
-		return tables;
+		return TableBoundaryHints.getHints();
 	}
 
 /*	//Sample Impl
