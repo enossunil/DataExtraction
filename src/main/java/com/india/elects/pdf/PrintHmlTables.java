@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Range;
-import com.india.elects.ls.year1977.TableBoundaryHints;
+
+import com.india.elects.ls.year2009.TableBoundaryHints;
+
 import com.india.elects.pdf.core.PDFTableExtractor;
 import com.india.elects.pdf.model.Table;
 import com.india.elects.pdf.model.TableBoundaryIndentificationHelper;
@@ -53,8 +55,11 @@ public class PrintHmlTables {
 
 	public static List<TableBoundaryIndentificationHelper> getHints() {
 
-		//1977
+
+		
 		return TableBoundaryHints.getHints();
+	}
+
 	}
 
 	/*
