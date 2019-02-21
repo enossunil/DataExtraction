@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Range;
-import com.india.elects.ls.year2004.model.TableBoundaryHints;
+import com.india.elects.ls.year2009.TableBoundaryHints;
 import com.india.elects.pdf.core.PDFTableExtractor;
 import com.india.elects.pdf.model.Table;
 import com.india.elects.pdf.model.TableBoundaryIndentificationHelper;
