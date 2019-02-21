@@ -1,8 +1,15 @@
-package com.india.elects.ls.year2009.model;
+package com.india.elects.ls.year1977.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -10,12 +17,9 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="ls_2009")
-@NamedQuery(name="Ls2009Constituency.findAll", query="SELECT l FROM Ls2009Constituency l")
-public class Ls2009Constituency implements Serializable {
-	
-	//TODO ENO - STORE POLLING PERCENTAGE By creating new table
-	
+@Table(name="ls_1977")
+@NamedQuery(name="Ls1977Constituency.findAll", query="SELECT l FROM Ls1977Constituency l")
+public class Ls1977Constituency implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -279,7 +283,7 @@ public class Ls2009Constituency implements Serializable {
 	@Column(name="withdrawn_women")
 	private Integer withdrawnWomen;
 
-	public Ls2009Constituency() {
+	public Ls1977Constituency() {
 	}
 
 	public Integer getId() {

@@ -43,7 +43,7 @@ public class PDFTableExtractor {
 
 	// --------------------------------------------------------------------------
 	// Members
-	private final Logger logger = LogManager.getLogger(PDFTableExtractor.class);
+	private final static Logger LOG = LogManager.getLogger(PDFTableExtractor.class);
 	// contains pages that will be extracted table content.
 	// If this variable doesn't contain any page, all pages will be extracted
 	private final List<Integer> extractedPages = new ArrayList<>();
@@ -169,7 +169,7 @@ public class PDFTableExtractor {
 						(List) pageIdNLineRangesMap.get(pageId), columnRanges, null);
 				retVal.add(table);
 				// debug
-				logger.debug("Found " + table.getRows().size() + " row(s) and " + columnRanges.size()
+				LOG.debug("Found " + table.getRows().size() + " row(s) and " + columnRanges.size()
 						+ " column(s) of a table in page " + pageId);
 			}
 		} catch (IOException ex) {
@@ -179,7 +179,7 @@ public class PDFTableExtractor {
 				try {
 					this.document.close();
 				} catch (IOException ex) {
-					logger.error(ex);
+					LOG.error(ex);
 				}
 			}
 		}
@@ -198,6 +198,7 @@ public class PDFTableExtractor {
 		this.document = this.password != null ? PDDocument.load(inputStream, this.password)
 				: PDDocument.load(inputStream);
 	}
+
 	public void close() throws IOException {
 		document.close();
 		inputStream.close();
@@ -235,7 +236,7 @@ public class PDFTableExtractor {
 						(List) tableIdNLineRangesMap.get(tableId), columnRanges, detectHelper.get(tableId));
 				retVal.add(table);
 				// debug
-				logger.debug("Found " + table.getRows().size() + " row(s) and " + columnRanges.size()
+				LOG.debug("Found " + table.getRows().size() + " row(s) and " + columnRanges.size()
 						+ " column(s) of a table in page " + pageId);
 			}
 		} catch (IOException ex) {
@@ -245,7 +246,7 @@ public class PDFTableExtractor {
 				try {
 					this.document.close();
 				} catch (IOException ex) {
-					logger.error(ex);
+					LOG.error(ex);
 				}
 			}
 		}
@@ -323,28 +324,37 @@ public class PDFTableExtractor {
 		int idx = 0;
 		int columnIdx = 0;
 		List<TextPosition> cellContent = new ArrayList<>();
-		while (idx < rowContent.size()) {
-			TextPosition textPosition = rowContent.get(idx);
-			Range<Integer> columnTrapRange = columnTrapRanges.get(columnIdx);
-			Range<Integer> textRange = Range.closed((int) textPosition.getX(),
-					(int) (textPosition.getX() + textPosition.getWidth()));
-			if (columnTrapRange.encloses(textRange)) {
-				cellContent.add(textPosition);
-				idx++;
-			} else {
+		try {
+
+			while (idx < rowContent.size()) {
+				TextPosition textPosition = rowContent.get(idx);
+				Range<Integer> columnTrapRange = columnTrapRanges.get(columnIdx);
+				Range<Integer> textRange = Range.closed((int) textPosition.getX(),
+						(int) (textPosition.getX() + textPosition.getWidth()));
+				if (columnTrapRange.encloses(textRange)) {
+					cellContent.add(textPosition);
+					idx++;
+				} else {
+					TableCell cell = buildCell(columnIdx, cellContent);
+					retVal.getCells().add(cell);
+					// next column: clear cell content
+					cellContent.clear();
+					columnIdx++;
+				}
+			}
+			if (!cellContent.isEmpty() && columnIdx < columnTrapRanges.size()) {
 				TableCell cell = buildCell(columnIdx, cellContent);
 				retVal.getCells().add(cell);
-				// next column: clear cell content
-				cellContent.clear();
-				columnIdx++;
 			}
+			// return
+			return retVal;
+		} catch (Exception e) {
+			LOG.error(rowContent);
+			LOG.error("idx >" + idx);
+			LOG.error("columnIdx" + columnIdx);
+			print(rowContent);
+			throw e;
 		}
-		if (!cellContent.isEmpty() && columnIdx < columnTrapRanges.size()) {
-			TableCell cell = buildCell(columnIdx, cellContent);
-			retVal.getCells().add(cell);
-		}
-		// return
-		return retVal;
 	}
 
 	private TableCell buildCell(int columnIdx, List<TextPosition> cellContent) {
@@ -376,11 +386,10 @@ public class PDFTableExtractor {
 	}
 
 	public List<TextPosition> printTextPositions(int pageId) throws IOException {
-		TextPositionExtractor extractor = new TextPositionExtractor(document, pageId,true);
+		TextPositionExtractor extractor = new TextPositionExtractor(document, pageId, true);
 		return extractor.extract();
 	}
 
-	
 	private List<TextPosition> extractTextPositions(int pageId, TableBoundaryIndentificationHelper bounds)
 			throws IOException {
 		TextPositionExtractor extractor = new TextPositionExtractor(document, pageId, bounds);
@@ -485,6 +494,33 @@ public class PDFTableExtractor {
 		return retVal;
 	}
 
+	public static void print(List<TextPosition> list) {
+
+		StringBuffer buffer = new StringBuffer(list.size());
+		StringBuffer t1 = new StringBuffer(150);
+		StringBuffer t2 = new StringBuffer(250);
+		double previousX = 0;
+		for (TextPosition txt : list) {
+			buffer.append(txt.getUnicode());
+			if (previousX > txt.getX()) {
+
+				LOG.debug(t1.toString());
+				LOG.debug(t2.toString());
+				t1 = new StringBuffer(150);
+				t2 = new StringBuffer(250);
+			}
+
+			t1.append(txt.getUnicode());
+			t2.append("[" + txt.getUnicode());
+			t2.append("(" + txt.getX() + ")] ");
+			previousX = txt.getX();
+		}
+		LOG.debug("*************************");
+		LOG.debug(buffer);
+		LOG.debug("*************************");
+
+	}
+
 	// --------------------------------------------------------------------------
 	// Inner class
 	private class TextPositionExtractor extends PDFTextStripper {
@@ -501,7 +537,7 @@ public class PDFTableExtractor {
 			this.pageId = pageId;
 		}
 
-		private TextPositionExtractor(PDDocument document, int pageId,boolean print) throws IOException {
+		private TextPositionExtractor(PDDocument document, int pageId, boolean print) throws IOException {
 			super();
 			super.setSortByPosition(true);
 			super.document = document;
@@ -509,7 +545,6 @@ public class PDFTableExtractor {
 			this.print = print;
 		}
 
-		
 		private TextPositionExtractor(PDDocument document, int pageId, TableBoundaryIndentificationHelper bounds)
 				throws IOException {
 			super();
@@ -575,11 +610,11 @@ public class PDFTableExtractor {
 
 				}
 			});
-			
-			if(print) {
+
+			if (print) {
 				print(textPositions);
 			}
-			
+
 			if (bounds != null) {
 				return filter(textPositions, bounds);
 			}
@@ -587,33 +622,6 @@ public class PDFTableExtractor {
 			return this.textPositions;
 		}
 
-		private void print(List<TextPosition> list) {
-
-				StringBuffer buffer = new StringBuffer(list.size());
-				StringBuffer t1 = new StringBuffer(150);
-				StringBuffer t2 = new StringBuffer(250);
-				double previousX = 0;
-				for (TextPosition txt : list) {
-					buffer.append(txt.getUnicode());
-					if (previousX > txt.getX()) {
-	
-						System.out.println(t1.toString());
-						System.out.println(t2.toString());
-						t1 = new StringBuffer(150);
-						t2 = new StringBuffer(250);
-					}
-	
-					t1.append(txt.getUnicode());
-					t2.append("[" + txt.getUnicode());
-					t2.append("(" + txt.getX() + ")] ");
-					previousX = txt.getX();
-				}
-				System.out.println("*************************");
-				System.out.println(buffer);
-				System.out.println("*************************");
-
-		}
-		
 		private List<TextPosition> filter(List<TextPosition> list, TableBoundaryIndentificationHelper bounds) {
 
 			StringBuffer buffer = new StringBuffer(list.size());
@@ -645,14 +653,20 @@ public class PDFTableExtractor {
 //			System.out.println("*************************");
 //			System.out.println(buffer.substring(startIndex,endIndex));
 //			System.out.println("*************************");
+			try {
 
-			System.out.println("*************************");
-			System.out.println(bounds);
-			System.out.println("startIndex[" + startIndex + "] endIndex[" + endIndex + "]");
+				return list.subList(startIndex, endIndex);
 
-			System.out.println("*************************");
+			} catch (Exception e) {
+				LOG.error("*************************");
+				LOG.error("Page "+pageId);
+				LOG.error(bounds);
+				LOG.error("startIndex[" + startIndex + "] endIndex[" + endIndex + "]");
 
-			return list.subList(startIndex, endIndex);
+				System.out.println("*************************");
+
+				throw e;
+			}
 
 		}
 	}
