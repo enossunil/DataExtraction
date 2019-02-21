@@ -12,9 +12,9 @@ public enum Validations implements IValidateMappings {
 	TOTAL_VALID("Votes", new Position(6, 0), "3. TOTAL VALID VOTES POLLED", null),
 	TENDERED_VOTES("Votes", new Position(8, 0), "4. TENDERED VOTES", null),
 	
-	POLLING_PERCENTAGE("Polling-Percantage", new Position(1, 1), "III(A). POLLING PERCENTAGE", null),
-	POLLING_STATIONS_NR("Polling-Stations", new Position(1, 1), "NUMBER", null),
-	POLLING_STATIONS_AVG("Polling-Stations", new Position(1, 3), "AVERAGE ELECTORS PER POLLING STATION", null),
+	POLLING_PERCENTAGE("Polling-Percantage", new Position(1, 0), "III(A). POLLING PERCENTAGE", null),
+	POLLING_STATIONS_NR("Polling-Stations", new Position(1, 0), "NUMBER", null),
+	POLLING_STATIONS_AVG("Polling-Stations", new Position(1, 2), "AVERAGE ELECTORS PER POLLING STATION", null),
 	REPOLL_DATES("Re-Poll-Dates", new Position(0, 0), "DATE(s) OF RE-POLL, IF ANY", null),
 	POLLING_DATES("Polling-Counting-Dates", new Position(1, 0), "POLLING", null),
 	COUNTING_DATES("Polling-Counting-Dates", new Position(1, 1), "COUNTING", null),
@@ -23,7 +23,7 @@ public enum Validations implements IValidateMappings {
 	RESULT_CAN("Results", new Position(0, 2), "CANDIDATE", null),
 	RESULT_VOTES("Results", new Position(0, 3), "VOTES", null),
 	RESULT_WIN("Results", new Position(2, 0), "WINNER", null),
-	RESULT_RUN("Results", new Position(4, 0), "RUNER-UP", null), MARGIN("Margin", new Position(8, 0), "MARGIN", null);
+	RESULT_RUN("Results", new Position(4, 0), "RUNER-UP", null), MARGIN("Margin", new Position(0, 0), "MARGIN", null);
 
 	private String tableId;
 	private Position position;
